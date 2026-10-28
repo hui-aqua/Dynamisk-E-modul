@@ -3,9 +3,6 @@
 on:
   push:
     branches: [main]
-    paths:
-      - 'dataviewer/**'
-      - '.github/workflows/deploy-pages.yml'
   workflow_dispatch:
 
 permissions:
