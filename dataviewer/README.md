@@ -10,7 +10,7 @@ python -m http.server 8000
 
 Then open `http://localhost:8000/dataviewer/`.
 
-The viewer displays the Date, Gage Length Correction, Fmax, dL (Fmax), and L0 values from the workbook?s `Results` sheet, and automatically opens the first measurement sheet containing `Strain` and `Force` (or `Standard force`) columns. Drag across the plot to select a section, or enter point numbers, then calculate the ordinary least-squares force-versus-strain slope. The chart looks for a measurement sheet with `Strain` and `Force` or `Standard force` columns and a units row (`mm` or `%`; `N` or `kN`). Each workbook stays in browser memory. CSV export writes the valid plotted pairs for the selected sheet. Spreadsheet and chart libraries are loaded from public CDNs, so an internet connection is needed to open the viewer.
+The viewer displays the Date, Gage Length Correction, Fmax, dL (Fmax), and L0 values from the workbook?s `Results` sheet, and shows sheet selectors and defaults to the last sheet, with fallback to a detected strain/force sheet. Drag across the plot to select a section, or enter point numbers, then calculate the ordinary least-squares force-versus-strain slope. The chart looks for a measurement sheet with `Strain` and `Force` or `Standard force` columns and a units row (`mm` or `%`; `N` or `kN`). Each workbook stays in browser memory. CSV export writes the valid plotted pairs for the selected sheet. Spreadsheet and chart libraries are loaded from public CDNs, so an internet connection is needed to open the viewer.
 
 ## Deployment
 
