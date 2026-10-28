@@ -1,0 +1,16 @@
+﻿# Ignore all project files by default
+/*
+
+# Keep the data viewer
+!/dataviewer/
+!/dataviewer/**
+
+# Keep GitHub Pages deployment workflow
+!/.github/
+/.github/*
+!/.github/workflows/
+/.github/workflows/*
+!/.github/workflows/deploy-pages.yml
+
+# Keep this ignore file
+!/.gitignore
