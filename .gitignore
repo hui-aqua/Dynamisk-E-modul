@@ -11,6 +11,6 @@
 !/.github/workflows/
 /.github/workflows/*
 !/.github/workflows/deploy-pages.yml
-
+!Laboratory_Test_Procedure_Rope_and_Netting.md
 # Keep this ignore file
 !/.gitignore
