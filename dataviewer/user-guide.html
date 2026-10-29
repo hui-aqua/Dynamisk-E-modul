@@ -1,72 +1,66 @@
 ﻿<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dynamic Test Data Viewer — User Guide</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark">
+<title>Data Viewer User Guide</title>
 <style>
-:root{color-scheme:light;--bg:#f3f6fa;--panel:#fff;--line:#d6deea;--text:#172438;--muted:#52657c;--blue:#145ea8;--mint:#007d68}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0,#e5eff9 0,transparent 42%),var(--bg);color:var(--text);font:15px/1.6 system-ui,Segoe UI,sans-serif}header{padding:24px clamp(18px,5vw,64px) 20px;border-bottom:1px solid var(--line);background:#ffffffc9}h1{font-size:clamp(26px,4vw,38px);line-height:1.15;margin:0 0 8px}header p{color:var(--muted);margin:0}nav{margin-top:12px}a{color:var(--blue)}main{max-width:1000px;margin:24px auto;padding:0 18px 48px}section{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin:14px 0;box-shadow:0 3px 14px #20384d0a}h2{font-size:20px;margin:0 0 10px}h3{font-size:16px;margin:18px 0 6px}p{margin:8px 0}li{margin:5px 0}code{background:#edf2f7;padding:2px 5px;border-radius:4px}table{border-collapse:collapse;width:100%;margin:10px 0}th,td{padding:8px 10px;border:1px solid var(--line);text-align:left;vertical-align:top}th{background:#eef3f8}aside{border-left:4px solid var(--mint);background:#eff9f6;padding:10px 14px;margin:12px 0}@media(max-width:600px){section{padding:16px}table{font-size:13px}}
+:root{color-scheme:light;--bg:#f3f6fa;--paper:#fff;--ink:#172438;--muted:#52657c;--line:#d6deea;--blue:#145ea8;--mint:#007d68}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0,#e5eff9 0,transparent 42%),var(--bg);color:var(--ink);font:16px/1.62 system-ui,Segoe UI,sans-serif}.page{max-width:980px;margin:24px auto;padding:0 18px 42px}.sheet{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:clamp(20px,4vw,42px);box-shadow:0 8px 32px #20384d0a}h1{font-size:clamp(28px,4vw,40px);line-height:1.12;margin:0 0 8px}h2{font-size:21px;margin:30px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--line)}h3{font-size:16px;margin:18px 0 6px}p{margin:8px 0}.intro,.note{border-left:4px solid var(--mint);background:#eff9f6;padding:10px 14px;margin:14px 0}.muted{color:var(--muted)}li{margin:5px 0}code{background:#edf2f7;padding:2px 5px;border-radius:4px}table{border-collapse:collapse;width:100%;margin:10px 0}th,td{padding:8px 10px;border:1px solid var(--line);text-align:left;vertical-align:top}th{background:#eef3f8}a{color:var(--blue)}.toplinks{margin:12px 0 18px}.footer{margin-top:28px;border-top:1px solid var(--line);padding-top:12px;font-size:13px;color:var(--muted)}@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#0b1220;--paper:#111c2c;--ink:#e7eef6;--muted:#a6b4c5;--line:#2c3b50;--blue:#8fc5ff;--mint:#5ee0bd}body{background:var(--bg)}.intro,.note{background:#15332f}code,th{background:#0d1725}}
 </style>
 </head>
-<body>
-<header>
+<body><main class="page"><article class="sheet">
 <h1>Dynamic Test Data Viewer</h1>
-<p>User guide for loading rope test workbooks, reviewing dynamic cycles, fitting a curve, and estimating Young’s modulus.</p>
-<nav><a href="index.html">Open the data viewer</a> · <a href="procedure.html">Open full laboratory test procedure</a></nav>
-</header>
-<main>
-<section>
-<h2>1. Load test data</h2>
+<p class="muted">User guide for engineers and technicians reviewing rope test measurements.</p>
+<nav class="toplinks"><a href="index.html">Open the data viewer</a> · <a href="procedure.html">Laboratory test procedure</a></nav>
+<p class="intro">Use this guide to inspect a completed test, choose a fitting range, enter specimen dimensions, and review the viewer’s estimated modulus. Stage and cycle boundaries are automatic estimates; confirm them against the test record.</p>
+
+<h2>1. Open a test workbook</h2>
 <ol>
-<li>Open the viewer and choose one or more <code>.xls</code>, <code>.xlsx</code>, <code>.xlsm</code>, or <code>.csv</code> files, or drag files onto the file panel.</li>
-<li>Select a workbook in the file list, then select the measurement sheet using the tabs above the plot. The viewer looks for columns named <code>Strain</code> and <code>Force</code> or <code>Standard force</code>, with units in the workbook.</li>
-<li>Files are read in your browser and are not uploaded by the viewer. The viewer’s spreadsheet and chart libraries load from public CDNs, so an internet connection is needed.</li>
+<li>In the viewer’s left panel, choose an Excel or CSV test file, or drag the file onto the panel.</li>
+<li>Select the workbook from the file list. Choose the force and stretch measurement sheet from the tabs above the plot.</li>
+<li>Check the specimen name and measurement units shown above the plot. The viewer keeps selected files in your browser; it does not upload them.</li>
 </ol>
-<p>To run a local preview on Windows, open PowerShell in the <code>dataviewer</code> folder and run <code>./preview-local.ps1</code>. Keep that window open while testing; press Ctrl+C to stop the server.</p>
-</section>
-<section>
-<h2>2. Review workbook information and stages</h2>
-<p>When a Results sheet has recognizable parameter headings, the viewer displays its values above the plot. If it cannot read those headings, the measurement plot and manual engineering inputs can still be used.</p>
-<p>The left panel lists estimated test stages and dynamic cycles. Select a stage or cycle to highlight its data and set the point range for fitting. Detection boundaries are estimates; compare them with the instrument record.</p>
-<h3>Set force targets</h3>
+<p>If a sheet has no recognizable force and stretch columns, the viewer shows its rows as a table. The Results summary may also be unavailable if its headings cannot be read; you can still inspect the curve and enter engineering values manually.</p>
+
+<h2>2. Review the stages and dynamic cycles</h2>
+<p>The left panel lists estimated test stages and dynamic cycles. Select a stage or cycle to highlight its points and set the fitting range. A cycle marked with an asterisk is an incomplete final cycle with no detected return to the reference load.</p>
+<h3>Check the force targets</h3>
 <ul>
-<li><strong>T_design (N):</strong> the design target used for stage and cycle detection. It defaults to a detected value but can be edited when the target differs from F_max. Changing it reruns detection.</li>
-<li><strong>T_design buffer (% of T_design):</strong> moves the design boundary below T_design. For example, 1% uses 0.99 × T_design as the boundary.</li>
-<li><strong>T_ref (N):</strong> the reference or low-load target used to locate returns.</li>
-<li><strong>T_ref buffer (% of force span above T_ref):</strong> sets the return band above T_ref. The force span is T_design − T_ref; a 1% buffer gives T_ref + 0.01 × (T_design − T_ref).</li>
+<li><strong>T_design target (N)</strong> is the load target used to detect the stages. It may differ from measured F_max. Enter the intended test target and leave the field to update the estimates.</li>
+<li><strong>T_design buffer</strong> sets the boundary below T_design. For example, a 1% buffer places it at 99% of T_design.</li>
+<li><strong>T_ref (N)</strong> is the reference load used to detect low-load returns.</li>
+<li><strong>T_ref buffer</strong> sets the return band above T_ref as a percentage of the force span between T_ref and T_design.</li>
 </ul>
-<p>Change a target or buffer and leave the input to refresh the stage and cycle estimates.</p>
-</section>
-<section>
-<h2>3. Navigate and select a fitting range</h2>
-<ul>
-<li>Use the mouse wheel to zoom. Click two points on the plot to select a range, or enter the first and last point numbers in the range fields.</li>
-<li>Select a detected stage or dynamic cycle in the left panel to use its estimated bounds.</li>
-<li><strong>Reset zoom</strong> restores the original chart view. <strong>View1</strong> fits both axes to the data minimum and maximum. <strong>View2</strong> starts both axes at zero and ends at their data maximum.</li>
-</ul>
-<h3>Fit cycle range</h3>
-<table><thead><tr><th>Option</th><th>What it fits</th></tr></thead><tbody>
-<tr><td>Full cycle</td><td>All points in the selected point range.</td></tr>
-<tr><td>Loading path</td><td>The first half of the selected range, as force rises through the cycle.</td></tr>
-<tr><td>Unloading path</td><td>The second half of the selected range, as force falls through the cycle.</td></tr>
+<p>Changing a target or buffer refreshes the stage and cycle estimates. Your target edits stay in effect while you switch sheets in the same workbook; selecting another workbook starts with that test default. Review the highlighted points, especially when the measured peak does not equal T_design.</p>
+
+<h2>3. Choose and fit a range</h2>
+<ol>
+<li>Select a detected cycle in the left panel, or enter the first and last point numbers. You can also click a start point and then an end point on the plot.</li>
+<li>Choose the fitting mode, then click <strong>Calculate slope</strong>. The fitted points are highlighted in red and the fit summary appears above the plot.</li>
+</ol>
+<table><thead><tr><th>Fit cycle range</th><th>Points used</th></tr></thead><tbody>
+<tr><td>Full cycle</td><td>All points in the selected range.</td></tr>
+<tr><td>Loading path</td><td>The first half of the selected range.</td></tr>
+<tr><td>Unloading path</td><td>The second half of the selected range.</td></tr>
 </tbody></table>
-<p>For Loading path or Unloading path, the Path section menu appears. <strong>0–100%</strong> uses the full selected path. The other choices fit and highlight the indicated quarter: 0–25%, 25–50%, 50–75%, or 75–100%.</p>
-<p>Click <strong>Calculate slope</strong> after choosing a range. The fit result reports the fitted points, stretch and force span, linear equation, and x-intercept. The selected fit points are highlighted on the plot.</p>
-</section>
-<section>
-<h2>4. Estimate Young’s modulus</h2>
+<p>For Loading path and Unloading path, choose a <strong>Path section</strong>: <strong>0–100%</strong> uses that entire path; the four quarter options fit only 0–25%, 25–50%, 50–75%, or 75–100% of it.</p>
+<p>The result reports the range used, the force–stretch or force–strain fit, and its x-intercept. The fit box can scroll when a result is longer than the visible area.</p>
+
+<h2>4. Set specimen dimensions and review E</h2>
 <ul>
-<li>Enter the rope <strong>Diameter [mm]</strong> or <strong>Area [mm²]</strong>. The other field is calculated assuming a circular cross-section.</li>
-<li>Enter <strong>L0 [mm]</strong> if the Results sheet is missing or its value is incorrect. A manual L0 takes precedence over the workbook value.</li>
-<li>The viewer adds the fit’s x-intercept to L0, including a negative intercept. It calculates E when the resulting adjusted L0 is positive and an area is available.</li>
+<li>Enter <strong>Diameter [mm]</strong> or <strong>Area [mm²]</strong>. The viewer calculates the other value assuming a circular cross-section. You can replace either value directly.</li>
+<li>Enter <strong>L0 [mm]</strong> if the workbook value is missing or incorrect. Your entry is used in preference to the value read from Results.</li>
 </ul>
-<p>The calculation is <code>E = slope × adjusted L0 / cross-sectional area</code>. With force in newtons and length and area in millimetres, E is reported in MPa and GPa. Review the selected fit range and input values before using the estimate.</p>
-</section>
-<section>
-<h2>5. Inspect and export data</h2>
-<p>The data table shows up to 5,000 valid plotted rows. Click <strong>Export current sheet as CSV</strong> to export all valid force–stretch pairs from the selected sheet. Use <strong>Clear</strong> to remove loaded workbooks and reset the viewer’s inputs and results.</p>
-<aside>Stage and cycle detection provides convenient estimated boundaries. Confirm the selected points, targets, units, diameter or area, and L0 against the test record before using calculated values in engineering work.</aside>
-</section>
-</main>
-</body>
-</html>
+<p>For a plot whose horizontal axis is stretch in millimetres, the viewer adds the x-intercept to L0, including a negative intercept. If the adjusted L0 remains positive, it calculates <code>E = slope × adjusted L0 / area</code>.</p>
+<p>For a plot whose horizontal axis is strain in percent, it calculates <code>E = slope × 100 / area</code>; L0 is not used for that calculation. The result is reported in MPa and GPa when force is in newtons and area is in mm².</p>
+
+<h2>5. Change the plot view and export</h2>
+<ul>
+<li><strong>View1</strong> fits the plot to the data’s minimum and maximum stretch and force.</li>
+<li><strong>View2</strong> starts both axes at zero and ends them at the data maximums.</li>
+<li><strong>Reset zoom</strong> restores the chart’s original view. Use the mouse wheel to zoom.</li>
+<li><strong>Export current sheet as CSV</strong> saves all valid force–stretch or force–strain pairs from the selected sheet. The on-screen table displays up to 5,000 rows.</li>
+<li><strong>Clear</strong> removes the loaded files and resets the viewer’s selections and input fields.</li>
+</ul>
+<p class="note">Before using a calculated value in engineering analysis, confirm the selected points, force targets, units, specimen dimensions, and L0 against the test record.</p>
+<footer class="footer">For implementation and maintenance notes, see the <a href="developer-guide.html">developer guide</a>. For laboratory steps, see the <a href="procedure.html">full test procedure</a>.</footer>
+</article></main></body></html>

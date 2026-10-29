@@ -1,0 +1,74 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark">
+<title>Data Viewer Developer Guide</title>
+<style>
+:root{color-scheme:light;--bg:#f3f6fa;--paper:#fff;--ink:#172438;--muted:#52657c;--line:#d6deea;--blue:#145ea8;--mint:#007d68}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.58 system-ui,Segoe UI,sans-serif}.page{max-width:1000px;margin:24px auto;padding:0 18px 42px}.sheet{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:clamp(18px,4vw,40px)}h1{font-size:clamp(27px,4vw,38px);margin:0 0 8px}h2{font-size:20px;margin:28px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--line)}h3{font-size:16px;margin:18px 0 5px}p{margin:8px 0}li{margin:5px 0}code,pre{font-family:ui-monospace,Consolas,monospace}code{background:#edf2f7;padding:2px 5px;border-radius:4px}pre{background:#101b2a;color:#edf5fc;padding:12px 14px;border-radius:8px;overflow:auto}a{color:var(--blue)}.muted{color:var(--muted)}table{border-collapse:collapse;width:100%;margin:10px 0}th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}th{background:#eef3f8}.callout{border-left:4px solid var(--mint);background:#eff9f6;padding:10px 14px;margin:14px 0}@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#0b1220;--paper:#111c2c;--ink:#e7eef6;--muted:#a6b4c5;--line:#2c3b50;--blue:#8fc5ff;--mint:#5ee0bd}.callout{background:#15332f}code,th{background:#0d1725}}
+</style>
+</head>
+<body><main class="page"><article class="sheet">
+<h1>Data Viewer Developer Guide</h1>
+<p class="muted">Project structure, data flow, calculation rules, local development, and deployment.</p>
+<p><a href="index.html">Open viewer</a> · <a href="user-guide.html">End-user guide</a> · <a href="procedure.html">Laboratory procedure</a></p>
+
+<h2>Project files</h2>
+<table><thead><tr><th>File</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><code>index.html</code></td><td>Viewer markup, styling, workbook parsing, plot setup, range selection, calculations, and UI events. The app has no separate build step.</td></tr>
+<tr><td><code>user-guide.html</code></td><td>Instructions for engineers and technicians using the viewer.</td></tr>
+<tr><td><code>developer-guide.html</code></td><td>This project maintenance guide.</td></tr>
+<tr><td><code>procedure.html</code></td><td>Laboratory test procedure presented on GitHub Pages.</td></tr>
+<tr><td><code>preview-local.ps1</code></td><td>Starts a local Python static server and opens the viewer.</td></tr>
+<tr><td><code>../.github/workflows/deploy-pages.yml</code></td><td>Publishes the complete <code>dataviewer</code> directory to GitHub Pages on pushes to <code>main</code>.</td></tr>
+</tbody></table>
+
+<h2>Local preview</h2>
+<p>In PowerShell, change to the <code>dataviewer</code> directory and run:</p>
+<pre>./preview-local.ps1
+# Optional alternate port
+./preview-local.ps1 -Port 8080</pre>
+<p>The launcher serves the repository root so the viewer can link to local pages and sample workbooks. Keep the PowerShell window open; Ctrl+C stops the server. Python 3 is required. The HTML loads SheetJS, Chart.js, and chartjs-plugin-zoom from public CDNs, so previewing needs internet access.</p>
+<p>For a manual preview from the repository root:</p>
+<pre>python -m http.server 8000
+# Open http://localhost:8000/dataviewer/</pre>
+
+<h2>Workbook parsing and plot data</h2>
+<ul>
+<li>Files are parsed in the browser with SheetJS. There is no application server or workbook upload.</li>
+<li><code>findMeasurement</code> scans the first 30 rows for a header pair: <code>Strain</code>, <code>Stretch</code>, or <code>Extension</code>, plus <code>Force</code>, <code>Standard force</code>, or <code>Load</code>.</li>
+<li>Units are read from nearby rows or header labels. Lengths in metres and inches are converted to millimetres. kN and kgf values are converted to newtons. Percent strain remains in percent. Missing unit labels currently default to mm and N.</li>
+<li>Sheets without a recognized force/length pair display as tables. The selected measurement sheet supplies the plotted points and CSV export.</li>
+<li>The table is capped at 5,000 displayed rows; CSV export uses all valid plotted pairs.</li>
+<li>Manual T_design, T_ref, and L0 edits persist across sheets in the active workbook and clear when another workbook is selected.</li>
+</ul>
+
+<h2>Stage and cycle detection</h2>
+<p><code>identifyStages(points)</code> uses the editable force targets and buffers in the left panel. For design target <code>T_design</code>, reference target <code>T_ref</code>, and percentage buffers <code>bD</code> and <code>bR</code>:</p>
+<pre>designLimit = T_design × (1 - bD / 100)
+referenceLimit = T_ref + (T_design - T_ref) × bR / 100</pre>
+<p>The initial stage boundaries are located from crossings of the design and reference limits. Dynamic-cycle peaks are found after smoothing a downsampled trace; the peak threshold is midway between the two buffered limits. A cycle ends at a return to the reference limit. If that return is missing before the next peak or trace end, the local trough is used; the last incomplete cycle is marked with an asterisk. These are estimates, and the instrument trace remains the source of truth.</p>
+
+<h2>Fit selection and engineering calculations</h2>
+<ul>
+<li>The manual range fields are one-based, inclusive. Internally the point slice uses a zero-based start and exclusive end.</li>
+<li>Full cycle fits all points in the range. Loading and unloading each use one half, split at the midpoint. The quarter selector further subdivides that path; 0–100% leaves the complete path selected.</li>
+<li><code>linearFit</code> performs ordinary least-squares fitting of force against the selected horizontal-axis values. The reported x-intercept is <code>-intercept / slope</code>.</li>
+<li>For stretch in mm, the adjusted length is <code>L0 + x-intercept</code>. Negative intercepts are allowed; E is calculated when adjusted L0 remains positive and area is available.</li>
+<li>For strain in percent, E is <code>slope × 100 / area</code>; L0 is not used. Force points are normalized to N and cross-sectional area is in mm², so E is reported in MPa and GPa.</li>
+<li>Diameter and area inputs update each other assuming a circular section. A direct area entry is used for calculation.</li>
+</ul>
+<div class="callout">When changing fit or unit logic, update this guide and the end-user guide together. Keep the formulas consistent with the units shown in the result box.</div>
+
+<h2>Maintenance and verification</h2>
+<ol>
+<li>Make the smallest focused change in <code>index.html</code>; controls and logic are inline.</li>
+<li>Run <code>node --check</code> on each inline script extracted from <code>index.html</code> to catch JavaScript syntax errors.</li>
+<li>Run the local preview and load representative workbooks with mm/N, kN, percent strain, missing Results headings, and non-measurement sheets.</li>
+<li>Confirm manual T_design, both buffers, selected stage/cycle bounds, all fit modes, area/diameter conversion, and L0 overrides.</li>
+<li>Check that Clear resets values, results, and plot controls. Verify CSV output includes every valid row.</li>
+<li>Review both HTML guides and the laboratory procedure when changing labels or calculation behavior.</li>
+</ol>
+
+<h2>Deployment</h2>
+<p>The Actions workflow at <code>.github/workflows/deploy-pages.yml</code> uploads the complete <code>dataviewer</code> directory and deploys it to GitHub Pages on every push to <code>main</code>. In repository settings, Pages must use <strong>GitHub Actions</strong> as its build and deployment source. The viewer depends on CDN availability at runtime.</p>
+</article></main></body></html>
