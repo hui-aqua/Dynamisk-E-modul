@@ -1,4 +1,4 @@
-﻿# Rope Test Data Viewer
+# Rope Test Data Viewer
 
 Open `index.html` in a modern browser, then choose one or more `.xls`, `.xlsx`, `.xlsm`, or `.csv` test files. You can also drag files onto the file panel. The viewer parses selected files locally in the browser; it does not upload workbook data.
 
@@ -15,3 +15,6 @@ The viewer displays the Date, Gage Length Correction, Fmax, dL (Fmax), and L0 va
 ## Deployment
 
 The repository workflow deploys this folder to GitHub Pages on every push to `main`. In the repository settings, set **Pages > Build and deployment > Source** to **GitHub Actions**.
+
+
+The left panel lists estimated test stages and individually estimated dynamic cycles. Click an item to highlight its estimated rows in the plot. Dynamic cycles are separated using low-force troughs after the 5-minute reference hold; manually verify the cycle count and boundaries against the instrument record.
