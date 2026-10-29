@@ -1,15 +1,19 @@
-﻿# Ignore all project files by default
+# Ignore all project files by default
 /*
+!/README.md
 
 # Keep the data viewer
 !/dataviewer/
-!/dataviewer/**
+!/dataviewer/*
+!/README.md*
 
 # Keep GitHub Pages deployment workflow
 !/.github/
 /.github/*
+!/README.md
 !/.github/workflows/
 /.github/workflows/*
+!/README.md
 !/.github/workflows/deploy-pages.yml
 !Laboratory_Test_Procedure_Rope_and_Netting.md
 # Keep this ignore file
