@@ -137,3 +137,17 @@ For netting, it represents permanent set resulting from mesh reorientation, knot
 
 
 
+## 6. What AquaSim Needs
+
+AquaEdit requires **a single monotonic nonlinear force–strain curve**, given as:
+
+| Strain X [m/m] | Axial Force [N] |
+| -------------- | --------------- |
+| ...            | ...             |
+
+This curve represents the *backbone stiffness* of the line.
+
+👉 **Important:**
+ Dynamic solvers (AquaSim, AquaEdit, OrcaFlex, MoorDyn, etc.) **cannot accept cyclic loading–unloading loops**.
+ They need a **single increasing curve**.
+
