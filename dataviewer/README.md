@@ -2,7 +2,7 @@
 
 Open `index.html` in a modern browser, then choose one or more `.xls`, `.xlsx`, `.xlsm`, or `.csv` test files. You can also drag files onto the file panel. The viewer parses selected files locally in the browser; it does not upload workbook data.
 
-To load the sample workbooks, select the files from the `12102026` folder with the file picker or drag them onto the page. To serve the page locally from the project root:
+To load the sample workbooks, select the files from the `12102026` folder with the file picker or drag them onto the page. To start a local preview on Windows, run `preview-local.ps1` from this folder. It starts a local server and opens the viewer in your browser. Keep the PowerShell window open while testing; press Ctrl+C to stop the server. To use a different port, pass it as a parameter, for example `./preview-local.ps1 -Port 8080`. You can also serve the page manually from the project root:
 
 ```powershell
 python -m http.server 8000
