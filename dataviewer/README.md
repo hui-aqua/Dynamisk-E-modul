@@ -1,6 +1,6 @@
 ﻿# Rope Test Data Viewer
 
-Open `index.html` in a modern browser, then choose one or more `.xls`, `.xlsx`, `.xlsm`, or `.csv` test files. A single file opens immediately. You can choose multiple files or a folder, or drag a folder onto the file panel; those files are listed for selection. The folder picker is available if folder drag-and-drop is unsupported. The viewer parses selected files locally in the browser; it does not upload workbook data.
+Open `index.html` in a modern browser, then choose one or more `.xls`, `.xlsx`, `.xlsm`, or `.csv` test files. Choose or drop one Excel/CSV file at a time; it opens immediately. The viewer parses selected files locally in the browser; it does not upload workbook data.
 
 To load the sample workbooks, select the files from the `12102026` folder with the file picker or drag them onto the page. To serve the page locally from the project root:
 
