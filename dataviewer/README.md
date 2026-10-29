@@ -22,3 +22,7 @@ The left panel lists estimated test stages and individually numbered dynamic cyc
 ## Plot colors and legend
 
 The chart legend is hidden. Original test data are black in light theme and blue in dark theme; selected data are red in both themes; the linear fit is blue in light theme and white in dark theme. The theme switch updates these colors.
+
+## User guide
+
+The interactive [Data Viewer user guide](user-guide.html) explains workbook loading, stage and cycle targets, plot navigation, fit ranges, engineering inputs, and CSV export.
